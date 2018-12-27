@@ -10,10 +10,11 @@
 #define MAXTOKENS 1024
 #define TRUE 1
 #define FALSE 0
+#define BUFFERERROR 2
+#define CHILDSTATUS 3
 
 static void append(char **tokens, int token_index, char *line);
 static char* slice(char *line, int start, int end);
-
 
 
 char *read_line(void) {
@@ -23,7 +24,7 @@ char *read_line(void) {
 
     if (!buf) {
         fprintf(stderr, "allocation error");
-        exit(1);
+        exit(BUFFERERROR);
     }
     
     while (i < MAXSTR && (c = getchar()) != EOF && c != '\n') 
@@ -81,7 +82,7 @@ int launch_shell(char **args) {
     if (pid == 0) { // child
         if (execvp(args[0], args) == -1)
             fprintf(stderr, "shell failed to run");
-        exit(1);
+        exit(CHILDSTATUS);
     }
     else if (pid < 0) 
         fprintf(stderr, "failed to fork");
