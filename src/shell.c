@@ -4,6 +4,7 @@
 #include <unistd.h> // for exec
 #include <sys/types.h> // for fork
 #include <sys/wait.h> // for waitpid
+#include "builtins.h"
 
 #define MAXSTR 1024
 #define MAXTOKENS 1024
@@ -12,6 +13,8 @@
 
 static void append(char **tokens, int token_index, char *line);
 static char* slice(char *line, int start, int end);
+
+
 
 char *read_line(void) {
     char *buf = malloc(sizeof(char) * (MAXSTR + 1));
@@ -90,4 +93,30 @@ int launch_shell(char **args) {
     return 1;
 }
 
+int shell_execute(char **args) {
+    int i;
 
+    if (args[0] == NULL)
+        return 1;
+
+    for (i = 0; i < num_builtins; i++)
+        if (strcmp(args[0], builtin_str[i]) == 0)
+            return (*builtin_func[i])(args);
+
+    return launch_shell(args);
+}
+
+void shell_loop(void) {
+    char *line;
+    char **args;
+    int status;
+
+    do {
+        printf("$ ");
+        line = read_line();
+        args = parse_line(line);
+        status = shell_execute(args);
+        free(line);
+        free(args);
+    } while (status);
+}
