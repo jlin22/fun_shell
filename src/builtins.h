@@ -4,14 +4,18 @@
 
 char *builtin_str[] = {
     "cd",
-    "exit"
+    "exit",
+    "ls"
 };
 
 int shell_cd(char **args);
 int shell_exit(char **args);
+int shell_ls(char **args);
 
 int (*builtin_func[])(char **) = {
-    &shell_cd, &shell_exit
+    &shell_cd,
+    &shell_exit,
+    &shell_ls
 };
 
 

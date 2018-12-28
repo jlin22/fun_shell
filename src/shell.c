@@ -6,7 +6,6 @@
 #include <sys/wait.h> // for waitpid
 #include "builtins.h"
 
-#define MAXSTR 1024
 #define MAXTOKENS 1024
 #define TRUE 1
 #define FALSE 0
@@ -15,7 +14,6 @@
 
 static void append(char **tokens, int token_index, char *line);
 static char* slice(char *line, int start, int end);
-
 
 char *read_line(void) {
     char *buf = malloc(sizeof(char) * (MAXSTR + 1));
