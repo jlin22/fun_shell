@@ -176,6 +176,5 @@ void shell_loop(void) {
         free(line);
         free_tokens(args);
     } while (status);
-
 }
 

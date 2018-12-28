@@ -1,4 +1,5 @@
 #include <dirent.h>
+#include <string.h>
 
 #define SHELLEXIT 1
 #define MAXSTR 1024
@@ -40,6 +41,21 @@ int shell_pwd(char **args) {
     return 1;
 }
 
+int shell_cat(char **args) {
+    int i, c;
+    FILE *file;
+    
+    for (i = 1; args[i] != NULL; i++) {
+        if ((file = fopen(args[i], "r")) == NULL)  {
+            fprintf(stderr, "failed to open %s\n", args[i]);
+            return 2;
+        }
+        else 
+            while ((c = getc(file)) != EOF) 
+                putchar(c);
+    }
+    return 1;
+}
 int shell_square(char **args) {
     char s[4][5] = {"****", "*  *", "*  *", "****"};
     for (int i = 0; i < 4; i++)

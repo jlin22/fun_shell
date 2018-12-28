@@ -7,7 +7,8 @@ char *builtin_str[] = {
     "exit",
     "ls",
     "pwd",
-    "square"
+    "square",
+    "cat"
 };
 
 int shell_cd(char **args);
@@ -21,7 +22,8 @@ int (*builtin_func[])(char **) = {
     shell_exit,
     shell_ls,
     shell_pwd,
-    shell_square
+    shell_square,
+    shell_cat
 };
 
 
