@@ -33,8 +33,10 @@ int shell_pwd(char **args) {
     char *cwd = malloc(sizeof(char) * (MAXSTR + 1));
     if ((cwd = getcwd(cwd, MAXSTR)) == NULL)
         fprintf(stderr, "failed to get current working directory\n");
-    else
+    else {
         printf("%s\n", cwd);
+        free(cwd);
+    }
     return 1;
 }
 

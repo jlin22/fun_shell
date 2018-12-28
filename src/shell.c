@@ -105,17 +105,29 @@ int shell_execute(char **args) {
     return launch_shell(args);
 }
 
+void print_home(void) {
+    char *cwd = malloc(sizeof(char) * (MAXSTR + 1));
+    if ((cwd = getcwd(cwd, MAXSTR)) == NULL)
+        fprintf(stderr, "failed to get current working directory\n");
+    else {
+        printf("%s $ ", cwd);
+        free(cwd);
+    }
+}
+
 void shell_loop(void) {
     char *line;
     char **args;
     int status;
 
     do {
-        printf("$ ");
+        print_home();
         line = read_line();
         args = parse_line(line);
         status = shell_execute(args);
         free(line);
         free(args);
     } while (status);
+
 }
+
