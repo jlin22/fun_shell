@@ -37,3 +37,9 @@ int shell_pwd(char **args) {
         printf("%s\n", cwd);
     return 1;
 }
+
+int shell_square(char **args) {
+    char s[4][5] = {"****", "*  *", "*  *", "****"};
+    for (int i = 0; i < 4; i++)
+        printf("%s\n", s[i]);
+}
