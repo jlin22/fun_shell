@@ -115,6 +115,13 @@ void print_home(void) {
     }
 }
 
+void free_tokens(char **tokens) {
+    int i;
+    for (i = 0; tokens[i] != NULL; i++)
+        free(tokens[i]);
+    free(tokens);
+}
+
 void shell_loop(void) {
     char *line;
     char **args;
@@ -126,7 +133,7 @@ void shell_loop(void) {
         args = parse_line(line);
         status = shell_execute(args);
         free(line);
-        free(args);
+        free_tokens(args);
     } while (status);
 
 }
