@@ -11,6 +11,10 @@
 #define FALSE 0
 #define BUFFERERROR 2
 #define CHILDSTATUS 3
+#define INSPACE 0
+#define INWORD 1
+#define INONEQUOTE 2
+#define INTWOQUOTE 3
 
 static void append(char **tokens, int token_index, char *line);
 static char* slice(char *line, int start, int end);
@@ -38,6 +42,42 @@ char *read_line(void) {
 
 char **parse_line(char *line) {
     char **tokens = malloc(sizeof(char *) * (MAXTOKENS + 1));
+    int condition = INSPACE;
+    int i, c, token_start, token_index;
+    token_index = 0;
+
+    for (i = 0; line[i] != '\0'; i++) {
+        c = line[i];
+        if (condition == INSPACE && !isspace(c)) {
+            if (c == '\'') {
+                
+            }
+            else if (c == '"') {
+            }
+            else {
+                condition = INWORD;
+                token_start = i;
+            }
+        }
+        else if (condition == INONEQUOTE && c == '\'') {
+        }
+        else if (condition == INTWOQUOTE && c == '"') {
+        }
+        else if (condition == INWORD && isspace(c)) {
+            append(tokens, token_index++, slice(line, token_start, i));
+            condition = INSPACE;
+        }
+    }
+    if (condition == INWORD)
+        append(tokens, token_index++, slice(line, token_start, i+1));
+    
+    append(tokens, token_index++, NULL);
+
+    return tokens;
+}
+/*
+char **parse_line(char *line) {
+    char **tokens = malloc(sizeof(char *) * (MAXTOKENS + 1));
     int in_space = TRUE;
     int i, token_start, token_index;
     token_index = 0;
@@ -59,6 +99,7 @@ char **parse_line(char *line) {
         
     return tokens;
 }
+*/
 
 static void append(char **tokens, int token_index, char *line) {
     tokens[token_index] = line;
@@ -79,7 +120,7 @@ int launch_shell(char **args) {
     pid = fork();
     if (pid == 0) { // child
         if (execvp(args[0], args) == -1)
-            fprintf(stderr, "shell failed to run");
+            fprintf(stderr, "shell failed to run\n");
         exit(CHILDSTATUS);
     }
     else if (pid < 0) 
