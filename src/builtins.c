@@ -1,3 +1,5 @@
+#include <dirent.h>
+
 #define SHELLEXIT 1
 #define MAXSTR 1024
 
@@ -7,7 +9,7 @@ int shell_cd(char **args) {
     else 
         if (chdir(args[1]) != 0)
             fprintf(stderr, "failed to change directory\n");
-    return 0;
+    return 1;
 }
 
 int shell_exit(char **args) {
@@ -15,7 +17,16 @@ int shell_exit(char **args) {
 }
 
 int shell_ls(char **args) {
-    return 0; 
+    DIR *dp;
+    struct dirent *ep;
+    
+    if ((dp = opendir("./")) == NULL)
+        fprintf(stderr, "failed to open directory");
+    else {
+        while (ep = readdir(dp))
+            printf("%s\n", ep->d_name);
+    }
+    return 1;
 }
 
 int shell_pwd(char **args) {
@@ -24,5 +35,5 @@ int shell_pwd(char **args) {
         fprintf(stderr, "failed to get current working directory\n");
     else
         printf("%s\n", cwd);
-    return 0;
+    return 1;
 }
