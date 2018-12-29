@@ -40,6 +40,7 @@ char *read_line(void) {
     return buf;
 } 
 
+//TODO: consider nested quotes
 char **parse_line(char *line) {
     char **tokens = malloc(sizeof(char *) * (MAXTOKENS + 1));
     int condition = INSPACE;
@@ -50,9 +51,12 @@ char **parse_line(char *line) {
         c = line[i];
         if (condition == INSPACE && !isspace(c)) {
             if (c == '\'') {
-                
+                condition = INONEQUOTE;
+                token_start = i+1;
             }
             else if (c == '"') {
+                condition = INTWOQUOTE;
+                token_start = i+1;
             }
             else {
                 condition = INWORD;
@@ -60,8 +64,12 @@ char **parse_line(char *line) {
             }
         }
         else if (condition == INONEQUOTE && c == '\'') {
+            append(tokens, token_index++, slice(line, token_start, i));
+            condition = INSPACE;
         }
         else if (condition == INTWOQUOTE && c == '"') {
+            append(tokens, token_index++, slice(line, token_start, i));
+            condition = INSPACE;
         }
         else if (condition == INWORD && isspace(c)) {
             append(tokens, token_index++, slice(line, token_start, i));
@@ -69,6 +77,10 @@ char **parse_line(char *line) {
         }
     }
     if (condition == INWORD)
+        append(tokens, token_index++, slice(line, token_start, i+1));
+    else if (condition == INONEQUOTE)
+        append(tokens, token_index++, slice(line, token_start, i+1));
+    else if (condition == INTWOQUOTE)
         append(tokens, token_index++, slice(line, token_start, i+1));
     
     append(tokens, token_index++, NULL);
@@ -158,8 +170,9 @@ void print_home(void) {
 
 void free_tokens(char **tokens) {
     int i;
-    for (i = 0; tokens[i] != NULL; i++)
+    for (i = 0; tokens[i] != NULL; i++) {
         free(tokens[i]);
+    }
     free(tokens);
 }
 
