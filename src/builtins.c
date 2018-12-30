@@ -7,6 +7,7 @@
 /* TODO:
     grep
     test programs
+    redirection (>, <, and |)
 */
 int shell_cd(char **args) {
     if (args[1] != NULL)
