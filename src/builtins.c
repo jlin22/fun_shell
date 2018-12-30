@@ -4,6 +4,10 @@
 #define SHELLEXIT 1
 #define MAXSTR 1024
 
+/* TODO:
+    grep
+    test programs
+*/
 int shell_cd(char **args) {
     if (args[1] != NULL)
         chdir(args[1]);
