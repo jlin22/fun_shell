@@ -1,8 +1,7 @@
 #include <dirent.h>
-#include <string.h>
+#include "strmatch.c"
 
 #define SHELLEXIT 1
-#define MAXSTR 1024
 
 /* TODO:
     grep
