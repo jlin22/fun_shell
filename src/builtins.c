@@ -5,6 +5,9 @@
 
 /* TODO:
     grep
+        * make it print out the line number and the line itself
+        * use a more efficient algorithm
+        * create a regular expression parser
     test programs
     redirection (>, <, and |)
 */
