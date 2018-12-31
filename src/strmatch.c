@@ -7,15 +7,13 @@
 
 int str_in_line(char *substring, int substrlen, char *line) {
     int i, j, same;
-    for (i = 0; line[i + substrlen] != '\0'; i++)
+    for (i = 0; line[i + substrlen] != '\0'; i++) {
         same = 1;
-        for (j = 0; j < substrlen; j++)
-            if (line[i+j] != substring[j]) {
-                same = 0;
-                break;
-            }
+        for (j = 0; j < substrlen && same != 0; j++)
+            same &= (line[i + j] == substring[j]);
         if (same == 1)
             return 1;
+    }
     return 0;
 }
 
