@@ -9,22 +9,24 @@ char *builtin_str[] = {
     "ls",
     "pwd",
     "square",
-    "cat"
+    "cat",
+    "strmatch"
 };
 
 int shell_cd(char **args);
 int shell_exit(char **args);
 int shell_ls(char **args);
 int shell_pwd(char **args);
+int shell_cat(char **args);
 int shell_square(char **args);
+int shell_strmatch(char **args);
 
 int (*builtin_func[])(char **) = {
-    shell_func(cd),
+    shell_cd,
     shell_exit,
     shell_ls,
     shell_pwd,
     shell_square,
-    shell_cat
+    shell_cat,
+    shell_strmatch
 };
-
-
