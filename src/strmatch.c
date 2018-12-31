@@ -4,6 +4,7 @@
 #include <errno.h>
 
 #define MAXSTR 1024
+#define EXISTS 1
 
 int str_in_line(char *substring, int substrlen, char *line) {
     int i, j, same;
@@ -12,18 +13,23 @@ int str_in_line(char *substring, int substrlen, char *line) {
         for (j = 0; j < substrlen && same != 0; j++)
             same &= (line[i + j] == substring[j]);
         if (same == 1)
-            return 1;
+            return EXISTS;
     }
-    return 0;
+    return !EXISTS;
 }
 
+//Returns the line, -1 if it doesn't exist
 int find_str_in_file(char *substring, char *filename) {
-    FILE *f = fopen(filename, "r");
-    char *buffer = (char *)malloc(sizeof(char) * MAXSTR);
+    FILE *f;
+    char *buffer;
     size_t size;
     int line_num, substrlen;
+
+    f = fopen(filename, "r");
+    buffer = (char *)malloc(sizeof(char) * MAXSTR);
     line_num = 0;
     substrlen = strlen(substring);
+
     while (getline(&buffer, &size, f) != -1) {
         if (str_in_line(substring, substrlen, buffer))
             return line_num;
